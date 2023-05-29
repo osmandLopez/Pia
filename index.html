@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aplicación CRUD de Notas</title>
+</head>
+<body>
+    <h1>Aplicación CRUD de Notas</h1>
+    
+    <?php
+    // Incluye el archivo con las funciones CRUD
+    include 'functions.php';
+
+    // Verifica si se ha enviado el formulario de creación de una nueva nota
+    if (isset($_POST['create'])) {
+        $titulo = $_POST['titulo'];
+        $contenido = $_POST['contenido'];
+        createNota($titulo, $contenido);
+    }
+
+    // Verifica si se ha enviado el formulario de edición de una nota existente
+    if (isset($_POST['update'])) {
+        $id = $_POST['id'];
+        $titulo = $_POST['titulo'];
+        $contenido = $_POST['contenido'];
+        updateNota($id, $titulo, $contenido);
+    }
+
+    // Verifica si se ha enviado el formulario de eliminación de una nota
+    if (isset($_POST['delete'])) {
+        $id = $_POST['id'];
+        deleteNota($id);
+    }
+
+    // Obtiene todas las notas de la base de datos
+    $notas = getNotas();
+    ?>
+
+    <h2>Lista de Notas</h2>
+    <table>
+        <tr>
+            <th>Título</th>
+            <th>Contenido</th>
+            <th>Acciones</th>
+        </tr>
+        <?php foreach ($notas as $nota) { ?>
+            <tr>
+                <td><?php echo $nota['titulo']; ?></td>
+                <td><?php echo $nota['contenido']; ?></td>
+                <td>
+                    <a href="edit.php?id=<?php echo $nota['id']; ?>">Editar</a>
+                    <a href="delete.php?id=<?php echo $nota['id']; ?>">Eliminar</a>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+
+    <h2>Crear Nota</h2>
+    <form action="index.php" method="POST">
+        <label for="titulo">Título:</label>
+        <input type="text" name="titulo" required><br>
+        <label for="contenido">Contenido:</label>
+        <textarea name="contenido" required></textarea><br>
+        <input type="submit" name="create" value="Crear">
+    </form>
+</body>
+</html>
